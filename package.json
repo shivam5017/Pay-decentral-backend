@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "SDK-Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/pay": "^0.2.5",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.5",
+    "bignumber.js": "^9.1.2",
+    "express": "^4.21.1",
+    "qr-image": "^3.2.0"
+  }
+}
