@@ -1,22 +1,14 @@
-// netlify/functions/generate-payment-request.js
+// server.js
+const express = require('express');
 const qr = require('qr-image'); // To generate QR codes
+const app = express();
+const port = 5000;
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
-    };
-  }
+app.use(express.json());
 
-  const { amount, recipientWallet } = JSON.parse(event.body);
-
-  if (!amount || !recipientWallet) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Missing required fields: amount or recipientWallet' }),
-    };
-  }
+// Endpoint to generate a Solana Pay URL
+app.post('/generate-payment-request', async (req, res) => {
+  const { amount, recipientWallet } = req.body;
 
   try {
     // Create the Solana Pay URL
@@ -26,17 +18,12 @@ exports.handler = async (event, context) => {
     const qrSvg = qr.imageSync(solanaPayUrl, { type: 'svg' });
 
     // Return the QR code as SVG
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'image/svg+xml',
-      },
-      body: qrSvg.toString('utf8'), 
-    };
+    res.type('svg').send(qrSvg);
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, error: error.message }),
-    };
+    res.status(500).json({ success: false, error: error.message });
   }
-};
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
