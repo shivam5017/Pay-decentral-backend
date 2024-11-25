@@ -1,8 +1,11 @@
-// server.js
 const express = require('express');
-const qr = require('qr-image'); // To generate QR codes
+const cors = require('cors'); // Import cors
+const qr = require('qr-image');
 const app = express();
 const port = 5000;
+
+// Enable CORS for all routes
+app.use(cors()); // Allow all origins (by default)
 
 app.use(express.json());
 
@@ -13,7 +16,7 @@ app.post('/generate-payment-request', async (req, res) => {
   try {
     // Create the Solana Pay URL
     const solanaPayUrl = `solana:${recipientWallet}?amount=${amount}`;
-    
+
     // Generate the QR code for the payment URL
     const qrSvg = qr.imageSync(solanaPayUrl, { type: 'svg' });
 
