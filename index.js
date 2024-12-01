@@ -184,7 +184,7 @@ app.post('/verify-payment', async (req, res) => {
     userWallet, 
     planId 
   } = req.body;
-
+ 
   // Validate request body
   if (!transactionSignature || !recipientWallet || !amount || !userEmail || !developerApiKey || !userWallet || !planId) {
     return res.status(400).json({ success: false, error: 'Missing required fields' });
@@ -260,7 +260,7 @@ app.post('/verify-payment', async (req, res) => {
     const newUser = new UserModel({
       email: userEmail,
       walletAddress: userWallet, 
-      planId: planId, // Save the planId dynamically
+      planId: planId, 
       transactionSignature: transactionSignature,
       developerId: developer._id,
     });
@@ -279,7 +279,7 @@ app.post('/verify-payment', async (req, res) => {
 
 app.get('/get-verified-payments', async (req, res) => {
   const { developerApiKey } = req.query; // Extract the API key from the query params
-
+  
   if (!developerApiKey) {
     return res.status(400).json({ success: false, error: 'API key is required' });
   }
