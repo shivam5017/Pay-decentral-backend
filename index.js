@@ -175,12 +175,18 @@ app.post('/generate-payment-request', async (req, res) => {
 });
 
 app.post('/verify-payment', async (req, res) => {
-  const { transactionSignature, recipientWallet, amount, userEmail, developerApiKey, userWallet } = req.body;
-
-
+  const { 
+    transactionSignature, 
+    recipientWallet, 
+    amount, 
+    userEmail, 
+    developerApiKey, 
+    userWallet, 
+    planId 
+  } = req.body;
 
   // Validate request body
-  if (!transactionSignature || !recipientWallet || !amount || !userEmail || !developerApiKey || !userWallet) {
+  if (!transactionSignature || !recipientWallet || !amount || !userEmail || !developerApiKey || !userWallet || !planId) {
     return res.status(400).json({ success: false, error: 'Missing required fields' });
   }
 
@@ -190,9 +196,6 @@ app.post('/verify-payment', async (req, res) => {
     const userPublicKey = new PublicKey(userWallet);  // User wallet (sender)
     const expectedAmount = Number(amount); // Amount in lamports
 
-   
- 
-   
     // Poll transaction status to ensure it's finalized
     let isTransactionConfirmed = false;
     const maxAttempts = 10;
@@ -253,11 +256,11 @@ app.post('/verify-payment', async (req, res) => {
       });
     }
 
-    // Create a new user record
+    // Create a new user record with dynamic planId
     const newUser = new UserModel({
       email: userEmail,
-      walletAddress: userWallet, // Save the user's wallet address
-      planId: 'Basic', // Replace with actual planId if applicable
+      walletAddress: userWallet, 
+      planId: planId, // Save the planId dynamically
       transactionSignature: transactionSignature,
       developerId: developer._id,
     });
