@@ -32,7 +32,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
-
+// Backend
 app.post('/register-developer', async (req, res) => {
   const { email, companyName, password } = req.body;
 
